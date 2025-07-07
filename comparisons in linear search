@@ -1,0 +1,70 @@
+import random
+import matplotlib.pyplot as plt
+
+def linear_search_with_comparisons(arr, key):
+    comparisons = 0
+    for i in range(len(arr)):
+        comparisons += 1
+        if arr[i] == key:
+            return comparisons
+    return comparisons
+
+def generate_input(n):
+    return random.sample(range(1, n * 10), n)
+
+def main():
+    print("=== Linear Search Comparison Count ===")
+
+    # Ask user for input sizes (minimum 4)
+    while True:
+        try:
+            input_str = input("Enter at least 4 input sizes separated by space (e.g., 100 500 1000 10000):\n")
+            sizes = list(map(int, input_str.strip().split()))
+            if len(sizes) < 4:
+                print("❗ Please enter at least 4 input sizes.")
+                continue
+            break
+        except ValueError:
+            print("❗ Invalid input. Please enter space-separated integers only.")
+
+    best_comps, avg_comps, worst_comps = [], [], []
+
+    print("\nInput Size | Best_Cmp | Avg_Cmp | Worst_Cmp")
+    print("-" * 40)
+
+    for n in sizes:
+        arr = generate_input(n)
+
+        # Best Case
+        key_best = arr[0]
+        comps_best = linear_search_with_comparisons(arr, key_best)
+
+        # Average Case
+        key_avg = arr[n // 2]
+        comps_avg = linear_search_with_comparisons(arr, key_avg)
+
+        # Worst Case
+        key_worst = -1
+        comps_worst = linear_search_with_comparisons(arr, key_worst)
+
+        best_comps.append(comps_best)
+        avg_comps.append(comps_avg)
+        worst_comps.append(comps_worst)
+
+        print(f"{n:<10} | {comps_best:<9} | {comps_avg:<8} | {comps_worst:<9}")
+
+    # Plotting results
+    plt.plot(sizes, best_comps, marker='o', label='Best Case')
+    plt.plot(sizes, avg_comps, marker='o', label='Average Case')
+    plt.plot(sizes, worst_comps, marker='o', label='Worst Case')
+
+    plt.title("Linear Search: Number of Comparisons vs Input Size")
+    plt.xlabel("Input Size (n)")
+    plt.ylabel("Number of Comparisons")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    main()
